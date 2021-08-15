@@ -1,8 +1,8 @@
-/*! @name videojs-fetch-flv @version 1.0.0 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.1 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
 import videojs from 'video.js';
 
-var version = "1.0.0";
+var version = "1.0.1";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
@@ -18,11 +18,20 @@ var defaults = {
   opacity: 0.9
 };
 var vjsButton = videojs.getComponent('Button');
+/**
+ * Extends vjsButton
+ */
 
-var fetchButton = /*#__PURE__*/function (_vjsButton) {
-  _inheritsLoose(fetchButton, _vjsButton);
+var FetchButton = /*#__PURE__*/function (_vjsButton) {
+  _inheritsLoose(FetchButton, _vjsButton);
 
-  function fetchButton(player, options) {
+  /**
+   * constructor
+   *
+   * @param {*} player videojs
+   * @param {*} options param
+   */
+  function FetchButton(player, options) {
     var _this;
 
     _this = _vjsButton.call(this, player, options) || this;
@@ -31,14 +40,18 @@ var fetchButton = /*#__PURE__*/function (_vjsButton) {
 
     return _this;
   }
+  /**
+   * control button click event
+   */
 
-  var _proto = fetchButton.prototype;
+
+  var _proto = FetchButton.prototype;
 
   _proto.handleClick = function handleClick() {
     this.player().trigger('onFetchFlv');
   };
 
-  return fetchButton;
+  return FetchButton;
 }(vjsButton);
 /**
  * An advanced Video.js plugin. For more information on the API
@@ -87,6 +100,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
   }
   /**
    * Create div element to dispaly record status
+   *
    * @private
    */
 
@@ -95,6 +109,8 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
   _proto2.createCtx = function createCtx() {
     var video = this.player.el(); // Create div element
+
+    /* eslint-disable no-undef */
 
     var div = document.createElement('div');
     div.classList.add('vjs-fetch-flv-ctx');
@@ -140,29 +156,39 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     }
 
     video.appendChild(div);
-  };
+  }
+  /**
+   * Create a control button
+   */
+  ;
 
   _proto2.createButton = function createButton() {
     var _this3 = this;
 
     var player = this.player;
-    var btn = player.controlBar.addChild(new fetchButton(player, this.options), {});
+    var btn = player.controlBar.addChild(new FetchButton(player, this.options), {});
     btn.controlText(this.options.textControl);
     player.controlBar.el().insertBefore(btn.el(), player.controlBar.getChild(this.options.beforeElement).el());
     player.on('onFetchFlv', function () {
       _this3.handleClick();
     });
     this.button = btn;
-  };
+  }
+  /**
+   * init element
+   */
+  ;
 
   _proto2.setup = function setup() {
-    if (this.div != null) {
-      return;
+    if (this.div === null) {
+      this.createCtx();
+      this.createButton();
     }
-
-    this.createCtx();
-    this.createButton();
-  };
+  }
+  /**
+   * show fetch status
+   */
+  ;
 
   _proto2.show = function show() {
     if (this.div) {
@@ -172,7 +198,11 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     if (this.button) {
       this.button.addClass('vjs-fetch-flv-fetching');
     }
-  };
+  }
+  /**
+   * hide fetch status
+   */
+  ;
 
   _proto2.hide = function hide() {
     if (this.div) {
@@ -184,26 +214,33 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     }
   }
   /**
-   * 将数据转成文件
+   * save blob to media file
+   *
+   * @param {Blob} blob media data
    */
   ;
 
   _proto2.blob2File = function blob2File(blob) {
-    if (blob == null) {
-      return;
+    if (blob !== null) {
+      /* eslint-disable no-undef */
+      var url = window.URL.createObjectURL(blob);
+      /* eslint-disable no-undef */
+
+      var link = document.createElement('a');
+      link.style.display = 'none';
+      link.href = url;
+      link.download = this.filename;
+      document.body.appendChild(link);
+      link.click(); // 下载完成移除元素
+
+      /* eslint-disable no-undef */
+
+      document.body.removeChild(link); // 释放掉blob对象
+
+      /* eslint-disable no-undef */
+
+      window.URL.revokeObjectURL(url);
     }
-
-    var url = window.URL.createObjectURL(blob);
-    var link = document.createElement('a');
-    link.style.display = 'none';
-    link.href = url;
-    link.download = this.filename;
-    document.body.appendChild(link);
-    link.click(); // 下载完成移除元素
-
-    document.body.removeChild(link); // 释放掉blob对象
-
-    window.URL.revokeObjectURL(url);
   }
   /**
    * 利用fetch按帧下载数据并合并成blob
@@ -220,6 +257,8 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     this.filename = url.split('\\').pop().split('/').pop();
     this.controller = new AbortController();
     var signal = this.controller.signal;
+    /* eslint-disable no-undef */
+
     fetch(url, {
       signal: signal
     }).then(function (res) {
@@ -229,7 +268,9 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       that.type = res.headers.get('Content-Type');
       that.data = [];
       return new Promise(function (resolve) {
-        // 读取所有数据
+        /**
+         * 读取所有数据
+         */
         function push() {
           reader.read().then(function (_ref) {
             var done = _ref.done,
@@ -238,6 +279,8 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
             if (done) {
               // 包装成 blob 对象并返回
+
+              /* eslint-disable no-undef */
               resolve(new Blob(that.data, {
                 type: that.type
               }));
@@ -258,22 +301,22 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       _this4.blob2File(blob);
     }).catch(function (error) {
       _this4.fetching = false;
+      _this4.error = error;
 
       _this4.hide();
-
-      console.log(error);
     });
-  };
+  }
+  /**
+   * control button click event
+   */
+  ;
 
   _proto2.handleClick = function handleClick() {
     if (!this.options.isLive) {
       // 不是实时文件 直接下载
       var player = this.player;
       window.open(player.currentSrc(), 'Download');
-      return;
-    }
-
-    if (this.fetching) {
+    } else if (this.fetching) {
       this.fetching = false;
 
       if (this.data.length > 0) {
@@ -285,17 +328,12 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
       this.hide(); // 中止fetch
 
-      this.controller.abort(); //player.trigger('finishFetch')
+      this.controller.abort();
+    } else {
+      this.show(); // 下载文件
 
-      return;
-    } // window.open(this.options_.downloadURL || p.currentSrc(), 'Download');
-    //player.trigger('startFetch')
-    // console.log(this)
-
-
-    this.show(); // 下载文件
-
-    this.fetchMedia();
+      this.fetchMedia();
+    }
   };
 
   return FetchFlv;
@@ -308,4 +346,4 @@ FetchFlv.VERSION = version; // Register the plugin with video.js.
 
 videojs.registerPlugin('fetchFlv', FetchFlv);
 
-export default FetchFlv;
+export { FetchFlv as default };
