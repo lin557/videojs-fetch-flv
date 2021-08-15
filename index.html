@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>videojs-fetch-flv Demo</title>
+  <link href="node_modules/video.js/dist/video-js.css" rel="stylesheet">
+  <link href="dist/videojs-fetch-flv.css" rel="stylesheet">
+</head>
+<body>
+  <video id="videojs-fetch-flv-player" class="video-js vjs-default-skin" controls width="600" height="400">
+    <source src="//hlsflv-liveshow.bdstatic.com/live/stream_bduid_3041161111_4685007523-L1.flv" type="video/x-flv">
+    <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
+    <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
+  </video>
+  <ul>
+    <li><a href="/test/debug.html">Run unit tests in browser.</a></li>
+    
+  </ul>
+  <script src="node_modules/video.js/dist/video.js"></script>
+  <script src="node_modules/flv.js/dist/flv.min.js"></script>
+  <script src="node_modules/videojs-flvjs/dist/videojs-flvjs.min.js"></script>
+  <script src="dist/videojs-fetch-flv.js"></script>
+  <script>
+    (function(window, videojs) {
+      // var options = {
+      //   plugins: {
+      //     fetchFlv: {
+      //       isLive: false
+      //     }
+      //   }
+      // }
+      var examplePlayer = window.examplePlayer = videojs('videojs-fetch-flv-player')
+      var fetchFlv = window.fetchFlv = examplePlayer.fetchFlv({isLive: true})
+      // console.log(fetchFlv)
+    }(window, window.videojs))
+  </script>
+</body>
+</html>
