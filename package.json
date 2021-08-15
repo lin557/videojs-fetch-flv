@@ -1,7 +1,7 @@
 {
   "name": "videojs-fetch-flv",
   "version": "1.0.0",
-  "description": "download http-flv",
+  "description": "A videojs plugin to download http-flv stream",
   "main": "dist/videojs-fetch-flv.cjs.js",
   "module": "dist/videojs-fetch-flv.es.js",
   "browser": "dist/videojs-fetch-flv.js",
@@ -36,6 +36,10 @@
     "videojs",
     "videojs-plugin"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lin557/videojs-fetch-flv"
+  },
   "author": "lin557",
   "license": "MIT",
   "vjsstandard": {
