@@ -1,24 +1,26 @@
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-
-- [videojs-fetch-flv](#videojs-fetch-flv)
-  - [Installation](#installation)
-  - [Usage](#usage)
-    - [`<script>` Tag](#script-tag)
-    - [ES Modules](#es-modules)
-    - [Browserify/CommonJS](#browserifycommonjs)
-    - [RequireJS/AMD](#requirejsamd)
-  - [Configuration](#configuration)
-  - [License](#license)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # videojs-fetch-flv
 
 A videojs plugin to download http-flv stream
 
 ![image](docs/images/step0.png)
+
+## Table of Contents
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [`<script>` Tag](#script-tag)
+  - [ES Modules](#es-modules)
+  - [Browserify/CommonJS](#browserifycommonjs)
+  - [RequireJS/AMD](#requirejsamd)
+- [Configuration](#configuration)
+- [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 
 ## Installation
 
