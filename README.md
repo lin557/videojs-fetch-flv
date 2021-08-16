@@ -1,3 +1,19 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [videojs-fetch-flv](#videojs-fetch-flv)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [`<script>` Tag](#script-tag)
+    - [ES Modules](#es-modules)
+    - [Browserify/CommonJS](#browserifycommonjs)
+    - [RequireJS/AMD](#requirejsamd)
+  - [Configuration](#configuration)
+  - [License](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # videojs-fetch-flv
 
 A videojs plugin to download http-flv stream
@@ -19,6 +35,8 @@ npm install --save video.js videojs-flvjs flv.js
 
 npm install --save video.js videojs-flvjs-es6 flv.js
 ```
+
+
 
 ## Usage
 
@@ -140,9 +158,25 @@ require(['video.js', 'videojs-fetch-flv'], function(videojs) {
 })
 ```
 
+
+
+## Configuration
+
+| Property      | Attributes | Type    | Default              | Description                                                  |
+| :------------ | :--------: | ------- | -------------------- | ------------------------------------------------------------ |
+| isLive        |  Optional  | Boolean | true                 | Download parameters. True is used to download http-flv,  false is used to download directly by the browser |
+| beforeElement |  Optional  | String  | fullscreenMenuToggle | Name of the player.controlBar component for the button to be attached before |
+| textControl   |  Optional  | String  | Download             | String for the control button title                          |
+| position      |  Optional  | String  | top-right            | The location to place the record status div (top-left, top-right, bottom-left, or bottom-right) |
+| padding       |  Optional  | Number  | 10                   | Padding around the record status div (px).                   |
+| opacity       |  Optional  | Number  | 1                    | The opacity of the record status div (from `[0, 1]`). If not specified, it will default to 1. |
+
+
+
 ## License
 
 MIT. Copyright (c) lin557
 
 
 [videojs]: http://videojs.com/
+

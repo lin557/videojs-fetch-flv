@@ -24,6 +24,8 @@ Testing is a crucial part of any software project. For all but the most trivial 
 - In a specific browser: `npm run test:chrome`, `npm run test:firefox`, etc.
 - While development server is running (`npm start`), navigate to [`http://localhost:9999/test/`][local]
 
+### Generator support
+https://player.support.brightcove.com/coding-topics/step-step-videojs-plugin-generator.html
 
 [karma]: http://karma-runner.github.io/
 [local]: http://localhost:9999/test/
