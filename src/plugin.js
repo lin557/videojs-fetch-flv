@@ -9,7 +9,7 @@ const Plugin = videojs.getPlugin('plugin');
 // Default options for the plugin.
 const defaults = {
   beforeElement: 'fullscreenToggle',
-  textControl: 'Download',
+  controlText: 'Download',
   // 默认实时流
   isLive: true,
   position: 'top-right',
@@ -140,7 +140,7 @@ class FetchFlv extends Plugin {
 
     const btn = player.controlBar.addChild(new FetchButton(player, this.options), {});
 
-    btn.controlText(this.options.textControl);
+    btn.controlText(this.options.controlText);
     player.controlBar.el().insertBefore(btn.el(), player.controlBar.getChild(this.options.beforeElement).el());
     player.on('onFetchFlv', () => {
       this.handleClick();
