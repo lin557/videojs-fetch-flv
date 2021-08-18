@@ -1,12 +1,14 @@
-/*! @name videojs-fetch-flv @version 1.0.1 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.2 @license MIT */
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('video.js')) :
-	typeof define === 'function' && define.amd ? define(['video.js'], factory) :
-	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.videojsFetchFlv = factory(global.videojs));
-}(this, (function (videojs) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('global/document'), require('global/window'), require('video.js')) :
+	typeof define === 'function' && define.amd ? define(['global/document', 'global/window', 'video.js'], factory) :
+	(global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.videojsFetchFlv = factory(global.document, global.window, global.videojs));
+}(this, (function (document, window, videojs) { 'use strict';
 
 	function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
+	var document__default = /*#__PURE__*/_interopDefaultLegacy(document);
+	var window__default = /*#__PURE__*/_interopDefaultLegacy(window);
 	var videojs__default = /*#__PURE__*/_interopDefaultLegacy(videojs);
 
 	function createCommonjsModule(fn, basedir, module) {
@@ -49,13 +51,13 @@
 	  module.exports["default"] = module.exports, module.exports.__esModule = true;
 	});
 
-	var version = "1.0.1";
+	var version = "1.0.2";
 
 	var Plugin = videojs__default['default'].getPlugin('plugin'); // Default options for the plugin.
 
 	var defaults = {
 	  beforeElement: 'fullscreenToggle',
-	  textControl: 'Download',
+	  controlText: 'Download',
 	  // 默认实时流
 	  isLive: true,
 	  position: 'top-right',
@@ -157,9 +159,7 @@
 	  _proto2.createCtx = function createCtx() {
 	    var video = this.player.el(); // Create div element
 
-	    /* eslint-disable no-undef */
-
-	    var div = document.createElement('div');
+	    var div = document__default['default'].createElement('div');
 	    div.classList.add('vjs-fetch-flv-ctx');
 	    div.classList.add('vjs-fetch-flv-ctx-hide');
 	    div.style.padding = this.options.padding + 'px'; // Setup position
@@ -214,7 +214,7 @@
 
 	    var player = this.player;
 	    var btn = player.controlBar.addChild(new FetchButton(player, this.options), {});
-	    btn.controlText(this.options.textControl);
+	    btn.controlText(this.options.controlText);
 	    player.controlBar.el().insertBefore(btn.el(), player.controlBar.getChild(this.options.beforeElement).el());
 	    player.on('onFetchFlv', function () {
 	      _this3.handleClick();
@@ -261,6 +261,48 @@
 	    }
 	  }
 	  /**
+	   * start fetch
+	   */
+	  ;
+
+	  _proto2.start = function start() {
+	    if (!this.options.isLive) {
+	      // 不是实时文件 直接下载
+	      var player = this.player;
+	      window__default['default'].open(player.currentSrc(), 'Download');
+	    } else if (!this.fetching) {
+	      this.fetching = true;
+	      this.show(); // 下载文件
+
+	      this.fetchMedia();
+	    }
+	  }
+	  /**
+	   * stop fetch
+	   *
+	   * @param {*} isSaveFile Save file when stopped
+	   */
+	  ;
+
+	  _proto2.stop = function stop(isSaveFile) {
+	    if (this.fetching) {
+	      this.hide();
+
+	      if (this.controller) {
+	        this.controller.abort();
+	      }
+
+	      this.fetching = false;
+
+	      if (this.data.length > 0 && isSaveFile) {
+	        var blob = new window__default['default'].Blob(this.data, {
+	          type: this.type
+	        });
+	        this.blob2File(blob);
+	      }
+	    }
+	  }
+	  /**
 	   * save blob to media file
 	   *
 	   * @param {Blob} blob media data
@@ -269,24 +311,17 @@
 
 	  _proto2.blob2File = function blob2File(blob) {
 	    if (blob !== null) {
-	      /* eslint-disable no-undef */
-	      var url = window.URL.createObjectURL(blob);
-	      /* eslint-disable no-undef */
-
-	      var link = document.createElement('a');
+	      var url = window__default['default'].URL.createObjectURL(blob);
+	      var link = document__default['default'].createElement('a');
 	      link.style.display = 'none';
 	      link.href = url;
 	      link.download = this.filename;
-	      document.body.appendChild(link);
+	      document__default['default'].body.appendChild(link);
 	      link.click(); // 下载完成移除元素
 
-	      /* eslint-disable no-undef */
+	      document__default['default'].body.removeChild(link); // 释放掉blob对象
 
-	      document.body.removeChild(link); // 释放掉blob对象
-
-	      /* eslint-disable no-undef */
-
-	      window.URL.revokeObjectURL(url);
+	      window__default['default'].URL.revokeObjectURL(url);
 	    }
 	  }
 	  /**
@@ -299,10 +334,9 @@
 
 	    var that = this;
 	    var player = this.player;
-	    this.fetching = true;
 	    var url = player.currentSrc();
 	    this.filename = url.split('\\').pop().split('/').pop();
-	    this.controller = new AbortController();
+	    this.controller = new window__default['default'].AbortController();
 	    var signal = this.controller.signal;
 	    /* eslint-disable no-undef */
 
@@ -334,6 +368,7 @@
 	            } else {
 	              push();
 	            }
+	          }).catch(function () {// console.log(e)
 	          });
 	        }
 
@@ -346,9 +381,8 @@
 	      _this4.hide();
 
 	      _this4.blob2File(blob);
-	    }).catch(function (error) {
+	    }).catch(function () {
 	      _this4.fetching = false;
-	      _this4.error = error;
 
 	      _this4.hide();
 	    });
@@ -359,27 +393,15 @@
 	  ;
 
 	  _proto2.handleClick = function handleClick() {
-	    if (!this.options.isLive) {
-	      // 不是实时文件 直接下载
-	      var player = this.player;
-	      window.open(player.currentSrc(), 'Download');
-	    } else if (this.fetching) {
-	      this.fetching = false;
-
-	      if (this.data.length > 0) {
-	        var blob = new Blob(this.data, {
-	          type: this.type
-	        });
-	        this.blob2File(blob);
+	    if (this.options.isLive) {
+	      // live stream
+	      if (this.fetching) {
+	        this.stop(true);
+	      } else {
+	        this.start();
 	      }
-
-	      this.hide(); // 中止fetch
-
-	      this.controller.abort();
 	    } else {
-	      this.show(); // 下载文件
-
-	      this.fetchMedia();
+	      this.start();
 	    }
 	  };
 

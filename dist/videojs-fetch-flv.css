@@ -1,2 +1,2 @@
-/*! @name videojs-fetch-flv @version 1.0.1 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.2 @license MIT */
 .video-js.vjs-fetch-flv{display:block}.video-js.vjs-fetch-flv .vjs-fetch-flv-ctx{position:absolute;opacity:1}.video-js.vjs-fetch-flv .vjs-fetch-flv-ctx span{display:inline-block;vertical-align:middle}.video-js.vjs-fetch-flv .vjs-fetch-flv-ctx-hide{visibility:hidden;opacity:0}.video-js.vjs-fetch-flv .vjs-fetch-flv-control,.video-js.vjs-fetch-flv .vjs-fetch-flv-icon{font-family:VideoJs}.video-js.vjs-fetch-flv .vjs-fetch-flv-icon:before{display:block;content:'\f111';font-size:1.5em;color:red}.video-js.vjs-fetch-flv .vjs-fetch-flv-control:before{display:block;content:'\f111';font-size:1.5em}.video-js.vjs-fetch-flv .vjs-fetch-flv-fetching:before{color:red}

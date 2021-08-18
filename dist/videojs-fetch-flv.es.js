@@ -1,14 +1,16 @@
-/*! @name videojs-fetch-flv @version 1.0.1 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.2 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
+import document from 'global/document';
+import window from 'global/window';
 import videojs from 'video.js';
 
-var version = "1.0.1";
+var version = "1.0.2";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
 var defaults = {
   beforeElement: 'fullscreenToggle',
-  textControl: 'Download',
+  controlText: 'Download',
   // 默认实时流
   isLive: true,
   position: 'top-right',
@@ -110,8 +112,6 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
   _proto2.createCtx = function createCtx() {
     var video = this.player.el(); // Create div element
 
-    /* eslint-disable no-undef */
-
     var div = document.createElement('div');
     div.classList.add('vjs-fetch-flv-ctx');
     div.classList.add('vjs-fetch-flv-ctx-hide');
@@ -167,7 +167,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
     var player = this.player;
     var btn = player.controlBar.addChild(new FetchButton(player, this.options), {});
-    btn.controlText(this.options.textControl);
+    btn.controlText(this.options.controlText);
     player.controlBar.el().insertBefore(btn.el(), player.controlBar.getChild(this.options.beforeElement).el());
     player.on('onFetchFlv', function () {
       _this3.handleClick();
@@ -214,6 +214,48 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     }
   }
   /**
+   * start fetch
+   */
+  ;
+
+  _proto2.start = function start() {
+    if (!this.options.isLive) {
+      // 不是实时文件 直接下载
+      var player = this.player;
+      window.open(player.currentSrc(), 'Download');
+    } else if (!this.fetching) {
+      this.fetching = true;
+      this.show(); // 下载文件
+
+      this.fetchMedia();
+    }
+  }
+  /**
+   * stop fetch
+   *
+   * @param {*} isSaveFile Save file when stopped
+   */
+  ;
+
+  _proto2.stop = function stop(isSaveFile) {
+    if (this.fetching) {
+      this.hide();
+
+      if (this.controller) {
+        this.controller.abort();
+      }
+
+      this.fetching = false;
+
+      if (this.data.length > 0 && isSaveFile) {
+        var blob = new window.Blob(this.data, {
+          type: this.type
+        });
+        this.blob2File(blob);
+      }
+    }
+  }
+  /**
    * save blob to media file
    *
    * @param {Blob} blob media data
@@ -222,10 +264,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
   _proto2.blob2File = function blob2File(blob) {
     if (blob !== null) {
-      /* eslint-disable no-undef */
       var url = window.URL.createObjectURL(blob);
-      /* eslint-disable no-undef */
-
       var link = document.createElement('a');
       link.style.display = 'none';
       link.href = url;
@@ -233,11 +272,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       document.body.appendChild(link);
       link.click(); // 下载完成移除元素
 
-      /* eslint-disable no-undef */
-
       document.body.removeChild(link); // 释放掉blob对象
-
-      /* eslint-disable no-undef */
 
       window.URL.revokeObjectURL(url);
     }
@@ -252,10 +287,9 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
     var that = this;
     var player = this.player;
-    this.fetching = true;
     var url = player.currentSrc();
     this.filename = url.split('\\').pop().split('/').pop();
-    this.controller = new AbortController();
+    this.controller = new window.AbortController();
     var signal = this.controller.signal;
     /* eslint-disable no-undef */
 
@@ -287,6 +321,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
             } else {
               push();
             }
+          }).catch(function () {// console.log(e)
           });
         }
 
@@ -299,9 +334,8 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       _this4.hide();
 
       _this4.blob2File(blob);
-    }).catch(function (error) {
+    }).catch(function () {
       _this4.fetching = false;
-      _this4.error = error;
 
       _this4.hide();
     });
@@ -312,27 +346,15 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
   ;
 
   _proto2.handleClick = function handleClick() {
-    if (!this.options.isLive) {
-      // 不是实时文件 直接下载
-      var player = this.player;
-      window.open(player.currentSrc(), 'Download');
-    } else if (this.fetching) {
-      this.fetching = false;
-
-      if (this.data.length > 0) {
-        var blob = new Blob(this.data, {
-          type: this.type
-        });
-        this.blob2File(blob);
+    if (this.options.isLive) {
+      // live stream
+      if (this.fetching) {
+        this.stop(true);
+      } else {
+        this.start();
       }
-
-      this.hide(); // 中止fetch
-
-      this.controller.abort();
     } else {
-      this.show(); // 下载文件
-
-      this.fetchMedia();
+      this.start();
     }
   };
 

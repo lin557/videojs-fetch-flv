@@ -16,6 +16,9 @@ A videojs plugin to download http-flv stream
   - [ES Modules](#es-modules)
   - [Browserify/CommonJS](#browserifycommonjs)
   - [RequireJS/AMD](#requirejsamd)
+- [Methods](#methods)
+  - [start()](#start)
+  - [stop()](#stop)
 - [Configuration](#configuration)
 - [License](#license)
 
@@ -159,6 +162,41 @@ require(['video.js', 'videojs-fetch-flv'], function(videojs) {
   player.fetchFlv()
 })
 ```
+
+
+
+## Methods
+
+
+
+### start()
+
+When the player is playing, you can manually record.
+
+```js
+player.on('play', () => {
+  player.fetchFlv().start()
+})
+```
+
+
+
+### stop()
+
+When the player is playing, you can manually stop the recording and download the recording file.
+
+**Note:** When closing or destroying the player, if you are recording, it is best to call stop() first
+
+```js
+player.on('error', () => {
+  player.fetchFlv().stop(isSaveFile)
+})
+```
+
+isSaveFile: Boolean, default **false**
+
+- **true**: stop fetch and save the media file
+- **false**: stop fetch only
 
 
 
