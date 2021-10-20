@@ -206,6 +206,7 @@ isSaveFile: Boolean, default **false**
 | :------------ | :--------: | ------- | -------------------- | ------------------------------------------------------------ |
 | isLive        |  Optional  | Boolean | true                 | Download parameters. True is used to download http-flv,  false is used to download directly by the browser |
 | beforeElement |  Optional  | String  | fullscreenMenuToggle | Name of the player.controlBar component for the button to be attached before |
+| close         |  Optional  | Boolean | false                | hide record button                                           |
 | controlText   |  Optional  | String  | Download             | String for the control button title                          |
 | position      |  Optional  | String  | top-right            | The location to place the record status div (top-left, top-right, bottom-left, or bottom-right) |
 | padding       |  Optional  | Number  | 10                   | Padding around the record status div (px).                   |

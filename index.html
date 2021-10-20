@@ -37,7 +37,7 @@
       //   }
       // }
       var examplePlayer = window.examplePlayer = videojs('videojs-fetch-flv-player')
-      var fetchFlv = window.fetchFlv = examplePlayer.fetchFlv({isLive: true})
+      var fetchFlv = window.fetchFlv = examplePlayer.fetchFlv({isLive: true, close: false})
     }(window, window.videojs))
   </script>
 </body>

@@ -1,4 +1,4 @@
-/*! @name videojs-fetch-flv @version 1.0.3 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.4 @license MIT */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('global/document'), require('global/window'), require('video.js')) :
 	typeof define === 'function' && define.amd ? define(['global/document', 'global/window', 'video.js'], factory) :
@@ -51,7 +51,7 @@
 	  module.exports["default"] = module.exports, module.exports.__esModule = true;
 	});
 
-	var version = "1.0.3";
+	var version = "1.0.4";
 
 	var Plugin = videojs__default['default'].getPlugin('plugin'); // Default options for the plugin.
 
@@ -85,7 +85,13 @@
 
 	    _this = _vjsButton.call(this, player, options) || this;
 
-	    _this.addClass('vjs-fetch-flv-control');
+	    if (options.close) {
+	      _this.addClass('vjs-fetch-flv-control');
+
+	      _this.el_.style = 'display: none';
+	    } else {
+	      _this.addClass('vjs-fetch-flv-control');
+	    }
 
 	    return _this;
 	  }

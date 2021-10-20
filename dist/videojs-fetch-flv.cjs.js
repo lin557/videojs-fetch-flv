@@ -1,4 +1,4 @@
-/*! @name videojs-fetch-flv @version 1.0.3 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.4 @license MIT */
 'use strict';
 
 var _inheritsLoose = require('@babel/runtime/helpers/inheritsLoose');
@@ -13,7 +13,7 @@ var document__default = /*#__PURE__*/_interopDefaultLegacy(document);
 var window__default = /*#__PURE__*/_interopDefaultLegacy(window);
 var videojs__default = /*#__PURE__*/_interopDefaultLegacy(videojs);
 
-var version = "1.0.3";
+var version = "1.0.4";
 
 var Plugin = videojs__default['default'].getPlugin('plugin'); // Default options for the plugin.
 
@@ -47,7 +47,13 @@ var FetchButton = /*#__PURE__*/function (_vjsButton) {
 
     _this = _vjsButton.call(this, player, options) || this;
 
-    _this.addClass('vjs-fetch-flv-control');
+    if (options.close) {
+      _this.addClass('vjs-fetch-flv-control');
+
+      _this.el_.style = 'display: none';
+    } else {
+      _this.addClass('vjs-fetch-flv-control');
+    }
 
     return _this;
   }

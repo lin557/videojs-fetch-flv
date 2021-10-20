@@ -1,10 +1,10 @@
-/*! @name videojs-fetch-flv @version 1.0.3 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.4 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
 import document from 'global/document';
 import window from 'global/window';
 import videojs from 'video.js';
 
-var version = "1.0.3";
+var version = "1.0.4";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
@@ -38,7 +38,13 @@ var FetchButton = /*#__PURE__*/function (_vjsButton) {
 
     _this = _vjsButton.call(this, player, options) || this;
 
-    _this.addClass('vjs-fetch-flv-control');
+    if (options.close) {
+      _this.addClass('vjs-fetch-flv-control');
+
+      _this.el_.style = 'display: none';
+    } else {
+      _this.addClass('vjs-fetch-flv-control');
+    }
 
     return _this;
   }

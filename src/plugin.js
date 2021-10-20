@@ -33,7 +33,12 @@ class FetchButton extends vjsButton {
    */
   constructor(player, options) {
     super(player, options);
-    this.addClass('vjs-fetch-flv-control');
+    if (options.close) {
+      this.addClass('vjs-fetch-flv-control');
+      this.el_.style = 'display: none';
+    } else {
+      this.addClass('vjs-fetch-flv-control');
+    }
   }
 
   /**
@@ -42,6 +47,7 @@ class FetchButton extends vjsButton {
   handleClick() {
     this.player().trigger('onFetchFlv');
   }
+
 }
 
 /**
