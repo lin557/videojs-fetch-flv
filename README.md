@@ -17,6 +17,9 @@ A videojs plugin to download http-flv stream
   - [Browserify/CommonJS](#browserifycommonjs)
   - [RequireJS/AMD](#requirejsamd)
 - [Methods](#methods)
+  - [show()](#show)
+  - [hide()](#hide)
+  - [updateIsLive(value)](#updateislivevalue)
   - [start()](#start)
   - [stop()](#stop)
 - [Configuration](#configuration)
@@ -169,6 +172,24 @@ require(['video.js', 'videojs-fetch-flv'], function(videojs) {
 
 
 
+### show()
+
+Show record button control
+
+
+
+### hide()
+
+Hide record button control
+
+
+
+### updateIsLive(value)
+
+update options.isLive value
+
+
+
 ### start()
 
 When the player is playing, you can manually record.
@@ -206,7 +227,6 @@ isSaveFile: Boolean, default **false**
 | :------------ | :--------: | ------- | -------------------- | ------------------------------------------------------------ |
 | isLive        |  Optional  | Boolean | true                 | Download parameters. True is used to download http-flv,  false is used to download directly by the browser |
 | beforeElement |  Optional  | String  | fullscreenMenuToggle | Name of the player.controlBar component for the button to be attached before |
-| close         |  Optional  | Boolean | false                | hide record button                                           |
 | controlText   |  Optional  | String  | Download             | String for the control button title                          |
 | position      |  Optional  | String  | top-right            | The location to place the record status div (top-left, top-right, bottom-left, or bottom-right) |
 | padding       |  Optional  | Number  | 10                   | Padding around the record status div (px).                   |

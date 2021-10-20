@@ -1,10 +1,10 @@
-/*! @name videojs-fetch-flv @version 1.0.4 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.8 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
 import document from 'global/document';
 import window from 'global/window';
 import videojs from 'video.js';
 
-var version = "1.0.4";
+var version = "1.0.8";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
@@ -38,13 +38,7 @@ var FetchButton = /*#__PURE__*/function (_vjsButton) {
 
     _this = _vjsButton.call(this, player, options) || this;
 
-    if (options.close) {
-      _this.addClass('vjs-fetch-flv-control');
-
-      _this.el_.style = 'display: none';
-    } else {
-      _this.addClass('vjs-fetch-flv-control');
-    }
+    _this.addClass('vjs-fetch-flv-control');
 
     return _this;
   }
@@ -196,7 +190,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
    */
   ;
 
-  _proto2.show = function show() {
+  _proto2.showFetch = function showFetch() {
     if (this.div) {
       this.div.classList.remove('vjs-fetch-flv-ctx-hide');
     }
@@ -210,13 +204,33 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
    */
   ;
 
-  _proto2.hide = function hide() {
+  _proto2.hideFetch = function hideFetch() {
     if (this.div) {
       this.div.classList.add('vjs-fetch-flv-ctx-hide');
     }
 
     if (this.button) {
       this.button.removeClass('vjs-fetch-flv-fetching');
+    }
+  }
+  /**
+   * hide button
+   */
+  ;
+
+  _proto2.show = function show() {
+    if (this.button) {
+      this.button.show();
+    }
+  }
+  /**
+   * show button
+   */
+  ;
+
+  _proto2.hide = function hide() {
+    if (this.button) {
+      this.button.hide();
     }
   }
   /**
@@ -231,7 +245,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       window.open(player.currentSrc(), 'Download');
     } else if (!this.fetching) {
       this.fetching = true;
-      this.show(); // 下载文件
+      this.showFetch(); // 下载文件
 
       this.fetchMedia();
     }
@@ -245,7 +259,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
   _proto2.stop = function stop(isSaveFile) {
     if (this.fetching) {
-      this.hide();
+      this.hideFetch();
 
       if (this.controller) {
         this.controller.abort();
@@ -353,14 +367,24 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       // 成功
       _this4.fetching = false;
 
-      _this4.hide();
+      _this4.hideFetch();
 
       _this4.blob2File(blob);
     }).catch(function () {
       _this4.fetching = false;
 
-      _this4.hide();
+      _this4.hideFetch();
     });
+  }
+  /**
+   * 运行期更新isLive状态
+   *
+   * @param {boolean} value 实时状态
+   */
+  ;
+
+  _proto2.updateIsLive = function updateIsLive(value) {
+    this.options.isLive = value;
   }
   /**
    * control button click event

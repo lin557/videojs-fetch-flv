@@ -33,12 +33,7 @@ class FetchButton extends vjsButton {
    */
   constructor(player, options) {
     super(player, options);
-    if (options.close) {
-      this.addClass('vjs-fetch-flv-control');
-      this.el_.style = 'display: none';
-    } else {
-      this.addClass('vjs-fetch-flv-control');
-    }
+    this.addClass('vjs-fetch-flv-control');
   }
 
   /**
@@ -47,7 +42,6 @@ class FetchButton extends vjsButton {
   handleClick() {
     this.player().trigger('onFetchFlv');
   }
-
 }
 
 /**
@@ -165,7 +159,7 @@ class FetchFlv extends Plugin {
   /**
    * show fetch status
    */
-  show() {
+  showFetch() {
     if (this.div) {
       this.div.classList.remove('vjs-fetch-flv-ctx-hide');
     }
@@ -177,12 +171,30 @@ class FetchFlv extends Plugin {
   /**
    * hide fetch status
    */
-  hide() {
+  hideFetch() {
     if (this.div) {
       this.div.classList.add('vjs-fetch-flv-ctx-hide');
     }
     if (this.button) {
       this.button.removeClass('vjs-fetch-flv-fetching');
+    }
+  }
+
+  /**
+   * hide button
+   */
+  show() {
+    if (this.button) {
+      this.button.show();
+    }
+  }
+
+  /**
+   * show button
+   */
+  hide() {
+    if (this.button) {
+      this.button.hide();
     }
   }
 
@@ -197,7 +209,7 @@ class FetchFlv extends Plugin {
       window.open(player.currentSrc(), 'Download');
     } else if (!this.fetching) {
       this.fetching = true;
-      this.show();
+      this.showFetch();
       // 下载文件
       this.fetchMedia();
     }
@@ -210,7 +222,7 @@ class FetchFlv extends Plugin {
    */
   stop(isSaveFile) {
     if (this.fetching) {
-      this.hide();
+      this.hideFetch();
       if (this.controller) {
         this.controller.abort();
       }
@@ -310,13 +322,22 @@ class FetchFlv extends Plugin {
       .then(blob => {
         // 成功
         this.fetching = false;
-        this.hide();
+        this.hideFetch();
         this.blob2File(blob);
       })
       .catch(() => {
         this.fetching = false;
-        this.hide();
+        this.hideFetch();
       });
+  }
+
+  /**
+   * 运行期更新isLive状态
+   *
+   * @param {boolean} value 实时状态
+   */
+  updateIsLive(value) {
+    this.options.isLive = value;
   }
 
   /**

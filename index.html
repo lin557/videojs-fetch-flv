@@ -8,7 +8,7 @@
 </head>
 <body>
   <video id="videojs-fetch-flv-player" class="video-js vjs-default-skin" controls width="600" height="400">
-    <source src="//dno-xiu-hd.youku.com/rtp/stream_alias_798733332_53648.flv?auth_key=1634717575-0-0-769a97f6d8d50c52ddc4fcd90fe8b121" type="video/x-flv">
+    <source src="https://dno-xiu-hd.youku.com/rtp/stream_alias_1382681473_8074368.flv?auth_key=1634727867-0-0-da1754c0b88961719832e0a22c69a404" type="video/x-flv">
     <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
     <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
   </video>
@@ -17,6 +17,8 @@
     <button onclick="fetchFlv.start()">start()</button>
     <button onclick="fetchFlv.stop(true)">stop(true)</button>
     <button onclick="fetchFlv.stop(false)">stop(false)</button>
+    <button onclick="fetchFlv.show()">showButton()</button>
+    <button onclick="fetchFlv.hide()">hideButton()</button>
   </div>
 
   <ul>
@@ -37,7 +39,7 @@
       //   }
       // }
       var examplePlayer = window.examplePlayer = videojs('videojs-fetch-flv-player')
-      var fetchFlv = window.fetchFlv = examplePlayer.fetchFlv({isLive: true, close: false})
+      var fetchFlv = window.fetchFlv = examplePlayer.fetchFlv({isLive: true, close: true})
     }(window, window.videojs))
   </script>
 </body>
