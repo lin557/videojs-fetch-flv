@@ -241,6 +241,21 @@ class FetchFlv extends Plugin {
   }
 
   /**
+   * url to filename
+   *
+   * @param {string} url url string
+   * @return {string} filename string
+   */
+  url2Filename(url) {
+    if (url) {
+      const vlist = url.split('?');
+
+      return vlist[0].split('\\').pop().split('/').pop();
+    }
+    return null;
+  }
+
+  /**
    * 利用fetch按帧下载数据并合并成blob
    */
   fetchMedia() {
@@ -250,7 +265,7 @@ class FetchFlv extends Plugin {
 
     const url = player.currentSrc();
 
-    this.filename = url.split('\\').pop().split('/').pop();
+    this.filename = this.url2Filename(url);
     this.controller = new window.AbortController();
     const signal = this.controller.signal;
 

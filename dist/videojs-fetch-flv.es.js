@@ -1,10 +1,10 @@
-/*! @name videojs-fetch-flv @version 1.0.2 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.3 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
 import document from 'global/document';
 import window from 'global/window';
 import videojs from 'video.js';
 
-var version = "1.0.2";
+var version = "1.0.3";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
@@ -278,6 +278,22 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     }
   }
   /**
+   * url to filename
+   *
+   * @param {string} url url string
+   * @return {string} filename string
+   */
+  ;
+
+  _proto2.url2Filename = function url2Filename(url) {
+    if (url) {
+      var vlist = url.split('?');
+      return vlist[0].split('\\').pop().split('/').pop();
+    }
+
+    return null;
+  }
+  /**
    * 利用fetch按帧下载数据并合并成blob
    */
   ;
@@ -288,7 +304,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     var that = this;
     var player = this.player;
     var url = player.currentSrc();
-    this.filename = url.split('\\').pop().split('/').pop();
+    this.filename = this.url2Filename(url);
     this.controller = new window.AbortController();
     var signal = this.controller.signal;
     /* eslint-disable no-undef */

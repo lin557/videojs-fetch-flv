@@ -1,4 +1,4 @@
-/*! @name videojs-fetch-flv @version 1.0.2 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.3 @license MIT */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('global/document'), require('global/window'), require('video.js')) :
 	typeof define === 'function' && define.amd ? define(['global/document', 'global/window', 'video.js'], factory) :
@@ -51,7 +51,7 @@
 	  module.exports["default"] = module.exports, module.exports.__esModule = true;
 	});
 
-	var version = "1.0.2";
+	var version = "1.0.3";
 
 	var Plugin = videojs__default['default'].getPlugin('plugin'); // Default options for the plugin.
 
@@ -325,6 +325,22 @@
 	    }
 	  }
 	  /**
+	   * url to filename
+	   *
+	   * @param {string} url url string
+	   * @return {string} filename string
+	   */
+	  ;
+
+	  _proto2.url2Filename = function url2Filename(url) {
+	    if (url) {
+	      var vlist = url.split('?');
+	      return vlist[0].split('\\').pop().split('/').pop();
+	    }
+
+	    return null;
+	  }
+	  /**
 	   * 利用fetch按帧下载数据并合并成blob
 	   */
 	  ;
@@ -335,7 +351,7 @@
 	    var that = this;
 	    var player = this.player;
 	    var url = player.currentSrc();
-	    this.filename = url.split('\\').pop().split('/').pop();
+	    this.filename = this.url2Filename(url);
 	    this.controller = new window__default['default'].AbortController();
 	    var signal = this.controller.signal;
 	    /* eslint-disable no-undef */
