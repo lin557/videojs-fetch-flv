@@ -1,10 +1,10 @@
-/*! @name videojs-fetch-flv @version 1.0.8 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.9 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
 import document from 'global/document';
 import window from 'global/window';
 import videojs from 'video.js';
 
-var version = "1.0.8";
+var version = "1.0.9";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 

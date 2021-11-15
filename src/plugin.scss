@@ -24,6 +24,9 @@
         display: inline-block;
         vertical-align: middle;
       }
+      span:first-child {
+        text-shadow: #000 1px 0 0, #000 0 1px 0, #000 -1px 0 0, #000 0 -1px 0;
+      }
     }
 
     .vjs-fetch-flv-ctx-hide {
