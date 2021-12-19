@@ -20,13 +20,20 @@
     .vjs-fetch-flv-ctx {
       position: absolute;
       opacity: 1;
-      span {
-        display: inline-block;
-        vertical-align: middle;
-        user-select: none;
-      }
+      user-select: none;
+      width: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 5px;
+      margin: 5px;
       span:first-child {
+        font-family: Tahoma, Arial, Helvetica, sans-serif;
+        font-size: 12px;
         text-shadow: #000 1px 0 0, #000 0 1px 0, #000 -1px 0 0, #000 0 -1px 0;
+      }
+      span:last-child {
+        text-shadow: #fff 1px 0 0, #fff 0 1px 0, #fff -1px 0 0, #fff 0 -1px 0;
       }
     }
 
@@ -38,9 +45,8 @@
     .vjs-fetch-flv-icon {
       font-family: VideoJs;
       &:before {
-        display: block;
         content: '\f111';
-        font-size: 1.5em;
+        font-size: 14px;
         color: red;
       }
     }

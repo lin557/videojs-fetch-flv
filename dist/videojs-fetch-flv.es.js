@@ -1,10 +1,10 @@
-/*! @name videojs-fetch-flv @version 1.0.9 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.10 @license MIT */
 import _inheritsLoose from '@babel/runtime/helpers/inheritsLoose';
 import document from 'global/document';
 import window from 'global/window';
 import videojs from 'video.js';
 
-var version = "1.0.9";
+var version = "1.0.10";
 
 var Plugin = videojs.getPlugin('plugin'); // Default options for the plugin.
 
@@ -86,6 +86,8 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
     _this2.options = videojs.mergeOptions(defaults, options);
     _this2.div = null;
     _this2.fetching = false;
+    _this2.flash = true;
+    _this2.flashCount = 0;
     _this2.data = [];
     _this2.type = 'video/x-flv';
     _this2.button = null;
@@ -114,8 +116,7 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
 
     var div = document.createElement('div');
     div.classList.add('vjs-fetch-flv-ctx');
-    div.classList.add('vjs-fetch-flv-ctx-hide');
-    div.style.padding = this.options.padding + 'px'; // Setup position
+    div.classList.add('vjs-fetch-flv-ctx-hide'); // Setup position
 
     var _this$options = this.options,
         offsetH = _this$options.offsetH,
@@ -173,6 +174,23 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       _this3.handleClick();
     });
     this.button = btn;
+    player.on('timeupdate', function () {
+      if (_this3.fetching) {
+        _this3.flashCount++;
+
+        if (_this3.flashCount % 3 === 0) {
+          _this3.flash = !_this3.flash;
+
+          if (_this3.div) {
+            if (_this3.flash) {
+              _this3.div.classList.remove('vjs-fetch-flv-ctx-hide');
+            } else {
+              _this3.div.classList.add('vjs-fetch-flv-ctx-hide');
+            }
+          }
+        }
+      }
+    });
   }
   /**
    * init element
@@ -245,9 +263,13 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
       window.open(player.currentSrc(), 'Download');
     } else if (!this.fetching) {
       this.fetching = true;
+      this.flash = true;
+      this.flashCount = 0;
       this.showFetch(); // 下载文件
 
-      this.fetchMedia();
+      this.fetchMedia(); // 触发下载事件
+
+      this.player.trigger('fetchStart');
     }
   }
   /**
@@ -272,7 +294,10 @@ var FetchFlv = /*#__PURE__*/function (_Plugin) {
           type: this.type
         });
         this.blob2File(blob);
-      }
+      } // 触发下载事件
+
+
+      this.player.trigger('fetchStop');
     }
   }
   /**

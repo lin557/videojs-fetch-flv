@@ -229,7 +229,6 @@ isSaveFile: Boolean, default **false**
 | beforeElement |  Optional  | String  | fullscreenMenuToggle | Name of the player.controlBar component for the button to be attached before |
 | controlText   |  Optional  | String  | Download             | String for the control button title                          |
 | position      |  Optional  | String  | top-right            | The location to place the record status div (top-left, top-right, bottom-left, or bottom-right) |
-| padding       |  Optional  | Number  | 10                   | Padding around the record status div (px).                   |
 | opacity       |  Optional  | Number  | 1                    | The opacity of the record status div (from `[0, 1]`). If not specified, it will default to 1. |
 
 

@@ -1,4 +1,4 @@
-/*! @name videojs-fetch-flv @version 1.0.9 @license MIT */
+/*! @name videojs-fetch-flv @version 1.0.10 @license MIT */
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('global/document'), require('global/window'), require('video.js')) :
 	typeof define === 'function' && define.amd ? define(['global/document', 'global/window', 'video.js'], factory) :
@@ -51,7 +51,7 @@
 	  module.exports["default"] = module.exports, module.exports.__esModule = true;
 	});
 
-	var version = "1.0.9";
+	var version = "1.0.10";
 
 	var Plugin = videojs__default['default'].getPlugin('plugin'); // Default options for the plugin.
 
@@ -133,6 +133,8 @@
 	    _this2.options = videojs__default['default'].mergeOptions(defaults, options);
 	    _this2.div = null;
 	    _this2.fetching = false;
+	    _this2.flash = true;
+	    _this2.flashCount = 0;
 	    _this2.data = [];
 	    _this2.type = 'video/x-flv';
 	    _this2.button = null;
@@ -161,8 +163,7 @@
 
 	    var div = document__default['default'].createElement('div');
 	    div.classList.add('vjs-fetch-flv-ctx');
-	    div.classList.add('vjs-fetch-flv-ctx-hide');
-	    div.style.padding = this.options.padding + 'px'; // Setup position
+	    div.classList.add('vjs-fetch-flv-ctx-hide'); // Setup position
 
 	    var _this$options = this.options,
 	        offsetH = _this$options.offsetH,
@@ -220,6 +221,23 @@
 	      _this3.handleClick();
 	    });
 	    this.button = btn;
+	    player.on('timeupdate', function () {
+	      if (_this3.fetching) {
+	        _this3.flashCount++;
+
+	        if (_this3.flashCount % 3 === 0) {
+	          _this3.flash = !_this3.flash;
+
+	          if (_this3.div) {
+	            if (_this3.flash) {
+	              _this3.div.classList.remove('vjs-fetch-flv-ctx-hide');
+	            } else {
+	              _this3.div.classList.add('vjs-fetch-flv-ctx-hide');
+	            }
+	          }
+	        }
+	      }
+	    });
 	  }
 	  /**
 	   * init element
@@ -292,9 +310,13 @@
 	      window__default['default'].open(player.currentSrc(), 'Download');
 	    } else if (!this.fetching) {
 	      this.fetching = true;
+	      this.flash = true;
+	      this.flashCount = 0;
 	      this.showFetch(); // 下载文件
 
-	      this.fetchMedia();
+	      this.fetchMedia(); // 触发下载事件
+
+	      this.player.trigger('fetchStart');
 	    }
 	  }
 	  /**
@@ -319,7 +341,10 @@
 	          type: this.type
 	        });
 	        this.blob2File(blob);
-	      }
+	      } // 触发下载事件
+
+
+	      this.player.trigger('fetchStop');
 	    }
 	  }
 	  /**

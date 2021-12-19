@@ -8,7 +8,7 @@
 </head>
 <body>
   <video id="videojs-fetch-flv-player" class="video-js vjs-default-skin" controls width="600" height="320">
-    <source src="https://hlsflv-liveshow.bdstatic.com/live/stream_bduid_1445064894_4960375993-L1.flv" type="video/x-flv">
+    <source src="https://hlsflv-liveshow.bdstatic.com/live/stream_bduid_2534754583_5061328007-L1.flv" type="video/x-flv">
     <source src="//vjs.zencdn.net/v/oceans.mp4" type='video/mp4'>
     <source src="//vjs.zencdn.net/v/oceans.webm" type='video/webm'>
   </video>
@@ -40,6 +40,14 @@
       // }
       var examplePlayer = window.examplePlayer = videojs('videojs-fetch-flv-player')
       var fetchFlv = window.fetchFlv = examplePlayer.fetchFlv({isLive: true, close: true})
+
+      examplePlayer.on('fetchStart', function() {
+        console.log('fetchStart')
+      })
+      examplePlayer.on('fetchStop', function() {
+        console.log('fetchStop')
+      })
+
     }(window, window.videojs))
   </script>
 </body>

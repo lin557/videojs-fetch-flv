@@ -70,12 +70,13 @@ class FetchFlv extends Plugin {
     this.options = videojs.mergeOptions(defaults, options);
     this.div = null;
     this.fetching = false;
+    this.flash = true;
+    this.flashCount = 0;
     this.data = [];
     this.type = 'video/x-flv';
     this.button = null;
     this.controller = null;
     this.filename = null;
-
     this.player.ready(() => {
       this.setup();
       this.player.addClass('vjs-fetch-flv');
@@ -94,7 +95,6 @@ class FetchFlv extends Plugin {
 
     div.classList.add('vjs-fetch-flv-ctx');
     div.classList.add('vjs-fetch-flv-ctx-hide');
-    div.style.padding = this.options.padding + 'px';
     // Setup position
     const { offsetH, offsetV } = this.options;
 
@@ -144,6 +144,21 @@ class FetchFlv extends Plugin {
       this.handleClick();
     });
     this.button = btn;
+    player.on('timeupdate', () => {
+      if (this.fetching) {
+        this.flashCount++;
+        if (this.flashCount % 3 === 0) {
+          this.flash = !this.flash;
+          if (this.div) {
+            if (this.flash) {
+              this.div.classList.remove('vjs-fetch-flv-ctx-hide');
+            } else {
+              this.div.classList.add('vjs-fetch-flv-ctx-hide');
+            }
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -209,9 +224,13 @@ class FetchFlv extends Plugin {
       window.open(player.currentSrc(), 'Download');
     } else if (!this.fetching) {
       this.fetching = true;
+      this.flash = true;
+      this.flashCount = 0;
       this.showFetch();
       // 下载文件
       this.fetchMedia();
+      // 触发下载事件
+      this.player.trigger('fetchStart');
     }
   }
 
@@ -232,6 +251,8 @@ class FetchFlv extends Plugin {
 
         this.blob2File(blob);
       }
+      // 触发下载事件
+      this.player.trigger('fetchStop');
     }
   }
 
