@@ -190,7 +190,7 @@ class FetchFlv extends Plugin {
     if (this.div) {
       this.div.classList.add('vjs-fetch-flv-ctx-hide');
     }
-    if (this.button) {
+    if (this.button && this.button.el_) {
       this.button.removeClass('vjs-fetch-flv-fetching');
     }
   }
